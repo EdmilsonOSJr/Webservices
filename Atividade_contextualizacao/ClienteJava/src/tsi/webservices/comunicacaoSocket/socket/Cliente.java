@@ -52,20 +52,19 @@ public class Cliente {
 
 		client = new Socket("127.0.0.1", 12345);
 		OutputStream saida = client.getOutputStream();
-		BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+		BufferedReader entrada = new BufferedReader(new InputStreamReader(client.getInputStream()));
 	
 		
 		for (Turma t : turmas) {
-			System.out.println(t);
 			
 			saida.write(String.format("%d!!%d!!%s!!%d!!%d", 1, t.getId(), t.getCurso(), t.getAno(), t.getAlunos().size()).getBytes("UTF-8"));
 			saida.flush();
-			input.readLine();
+			entrada.readLine();
 			
 			for (Aluno a : t.getAlunos()) {
 				saida.write(String.format("%d!!%d!!%s!!%d", 2, a.getId(), a.getNome(), a.isMatriculado()).getBytes("UTF-8"));
 				saida.flush();
-				input.readLine();
+				entrada.readLine();
 			}
 		
 			
@@ -75,6 +74,7 @@ public class Cliente {
 		saida.write("".getBytes("UTF-8"));
 
 		saida.close();
+		entrada.close();
 		client.close();
 
 	}

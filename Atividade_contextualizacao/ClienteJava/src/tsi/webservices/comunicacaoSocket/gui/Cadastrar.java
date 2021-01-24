@@ -108,7 +108,7 @@ public class Cadastrar extends JFrame {
 		tableTurmas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		panelTables.add(scrollPaneTurmas);
 		
-		JLabel lblNewLabel = new JLabel("Aten\u00E7\u00E3o! O aluno com valor do campo matriculado diferente de 1 ser\u00E1 compreendido como um aluno n\u00E3o matriculado.");
+		JLabel lblNewLabel = new JLabel("Aten\u00E7\u00E3o! O aluno com valor diferente de 1 no campo \"Matriculado\" n\u00E3o será matriculado.");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(20, 380, 700, 25);
 		contentPane.add(lblNewLabel);
