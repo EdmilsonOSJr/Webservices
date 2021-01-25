@@ -108,7 +108,7 @@ public class Cadastrar extends JFrame {
 		tableTurmas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		panelTables.add(scrollPaneTurmas);
 		
-		JLabel lblNewLabel = new JLabel("Aten\u00E7\u00E3o! O  com valor diferente de 1 no campo \"Matriculado\" n\u00E3o será matriculado.");
+		JLabel lblNewLabel = new JLabel("Aten\u00E7\u00E3o! O aluno com valor diferente de 1 no campo \"Matriculado\" n\u00E3o será matriculado.");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(20, 380, 700, 25);
 		contentPane.add(lblNewLabel);
@@ -138,6 +138,7 @@ public class Cadastrar extends JFrame {
 				turmas.add(turma);
 
 				modelTurma.addTurma(turma);
+				
 				
 				buttonEnviar.setEnabled(true);
 			}
