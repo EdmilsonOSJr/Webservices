@@ -43,11 +43,12 @@ public class ConsumoGit {
 				entrada.close();
 				
 				
-				System.out.println("Número de seguidores: "+map.size());
+				System.out.println("\nUsuário da consulta: "+usuario);
+				System.out.println("\nNúmero de seguidores: "+map.size());
 				
 				for(Map<String, String> follower : map) {
 					
-					System.out.println("Nome do seguidor: "+follower.get("login"));
+					System.out.println("\nNome do seguidor: "+follower.get("login"));
 					
 					url = new URL(" https://api.github.com/users/"+follower.get("login")+"/repos?type=owner\r\n");
 					connection = url.openConnection();
