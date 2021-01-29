@@ -18,7 +18,7 @@ public class ConsumoGit {
 		
 		try {
 			
-			URL url = new URL("https://api.github.com/users/Edmilson/followers");
+			URL url = new URL("https://api.github.com/users/EdmilsonOSJr/followers");
 			URLConnection connection = url.openConnection();
 			BufferedReader entrada = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			
