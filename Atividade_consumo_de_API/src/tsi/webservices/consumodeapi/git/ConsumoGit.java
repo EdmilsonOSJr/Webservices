@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,61 +13,78 @@ import java.util.Scanner;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-
 public class ConsumoGit {
 
+	private Gson gson = new Gson();
+	private URL url = null;
+	private URLConnection connection = null;
+	private String urlUsuario, urlFollowers, urlRepos;
+	
+	Map <Object,Map<String, String>> usuarios = new HashMap<Object, Map<String, String>>();// map usado para guardar os usuario
+	Map <Object,List<Map<Object, Object>>> dados = new HashMap<Object, List<Map<Object, Object>>>();// map usado para guardar os followers e seus repositorios
+	
 	public static void main(String[] args) {
-		String usuario;
-		try {
-			
-			Scanner input = new Scanner(System.in);			
+		new ConsumoGit();
+	}
+
+	public ConsumoGit() {
+		inicia();
+	}
+	
+	public void inicia() {
+		try(Scanner input = new Scanner(System.in)) {
 			
 			while(true) {
 				
 				System.out.println("\nDigite o nome de um usuário do GitHub ou \"exit\" para sair:");
-				
-				usuario = input.nextLine();
+				String usuario = input.nextLine();
 				
 				if(usuario.equalsIgnoreCase("exit")) {
 					input.close();
 					break;
 				}
 				
-				URL url = new URL("https://api.github.com/users/"+usuario+"/followers");
-				URLConnection connection = url.openConnection();
-				BufferedReader entrada = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				urlUsuario = "https://api.github.com/users/"+usuario;
+				confereBuffer(urlUsuario, usuarios); 
 				
-				Gson gson = new Gson();
+				urlFollowers = usuarios.get(urlUsuario).get("followers_url");
+				confereBuffer(urlFollowers, dados);
 				
-				
-				List<Map<String, String>> map = gson.fromJson(entrada, new TypeToken<List<Map<String, String>>>() {}.getType());
-				entrada.close();
-				
-				
-				System.out.println("\nUsuário da consulta: "+usuario);
-				System.out.println("\nNúmero de seguidores: "+map.size());
-				
-				for(Map<String, String> follower : map) {
+				System.out.println("\nUsuário da consulta: "+usuarios.get(urlUsuario).get("name"));
+				System.out.println("\nNúmero de seguidores: "+dados.get(urlFollowers).size());
+				for(Map<Object, Object> follower : dados.get(urlFollowers)) {
 					
-					System.out.println("\nNome do seguidor: "+follower.get("login"));
+					urlUsuario = "https://api.github.com/users/"+follower.get("login");
+					confereBuffer(urlUsuario,usuarios);
 					
-					url = new URL(" https://api.github.com/users/"+follower.get("login")+"/repos?type=owner\r\n");
-					connection = url.openConnection();
-					entrada = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					urlRepos = "https://api.github.com/users/"+follower.get("login")+"/repos?type=owner\r\n";
+					confereBuffer(urlRepos,dados);
 					
-					List<Map<Object, Object>> map2 = gson.fromJson(entrada, new TypeToken<List<Map<Object, Object>>>() {}.getType());
-					entrada.close();
-					
-					for(Map<Object, Object> repos : map2) {
+					System.out.println("\nNome do seguidor: "+usuarios.get(urlUsuario).get("name"));
+					for(Map<Object, Object> repos : dados.get(urlRepos)) {
 						System.out.println("\tRepositório: "+repos.get("name").toString());
 					}
 				}
-			}
-			
-			//entrada.close();
-			
+			}// while(true)
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("\nNúmero de tentativas excedidas, ou usuário não encontrado.");
+		}
+	}
+	
+	
+	// Confere se a url do usuário já foi procurado. Caso não tenha sido ele é adicionado ao Map de usuáios.
+	public <E> void confereBuffer(String chave, Map<Object,E> dados) throws IOException {
+		
+		if(!dados.containsKey(chave)) {
+			url = new URL(chave);
+			connection = url.openConnection();
+			try(BufferedReader entrada = new BufferedReader(new InputStreamReader(connection.getInputStream()))){
+				
+				if(chave.contains("repos") || chave.contains("followers")) 
+					dados.put(chave, gson.fromJson(entrada, new TypeToken<List<Map<Object, Object>>>() {}.getType()));					
+				else 
+					dados.put(chave,gson.fromJson(entrada, new TypeToken<Map<String, String>>() {}.getType()));
+			}
 		}
 		
 	}
