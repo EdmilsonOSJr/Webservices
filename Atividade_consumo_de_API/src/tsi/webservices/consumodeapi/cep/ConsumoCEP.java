@@ -1,28 +1,33 @@
 package tsi.webservices.consumodeapi.cep;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class ConsumoCEP {
 	
 	public static void main (String[] args) {
 		
+		Map <Object,Object> cepMap = new HashMap <Object, Object>();
+		URL url;
+		URLConnection connection;
+		BufferedReader input;
+		Gson gson;
+		String cep;
 		
-		try {
-			
-			Scanner entrada = new Scanner(System.in);			
+		try (Scanner entrada = new Scanner(System.in)){
 			
 			while(true) {
 				
 				System.out.println("\nDigite um cep ou \"exit\" para sair:");
-				
-				String cep = entrada.nextLine();
+				cep = entrada.nextLine();
 				
 				if(cep.equalsIgnoreCase("exit")) {
 					entrada.close();
@@ -30,64 +35,29 @@ public class ConsumoCEP {
 				}
 				
 				if(cep.matches("\\d{8}")) {
+					url = new URL("https://viacep.com.br/ws/"+cep+"/json");
+					connection = url.openConnection();
+					input = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 					
-					URL url = new URL("https://viacep.com.br/ws/"+cep+"/json");
-					URLConnection connection = url.openConnection();
-					BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					gson = new Gson();
 					
-					Gson gson = new Gson();
+					cepMap = gson.fromJson(input, new TypeToken<Map<Object, Object>>() {}.getType());
 					
-					CEP teste = gson.fromJson(input, CEP.class);
-					
-					if(teste.cep==null)
-						System.out.println("Cep inválido");
-					else
-						System.out.println("\n"+teste);	
+					if(cepMap.containsKey("erro"))
+						System.out.println("CEP fornecido não existe!!!");
+					else					
+						for (Map.Entry<Object,Object> pair : cepMap.entrySet()) {
+							System.out.println(String.format("%s : %s",pair.getKey(), pair.getValue().toString().isEmpty()?"Não fornecido":pair.getValue()));
+						}
 				}
 				else
-					System.out.println("Digite apenas 8 números!!");
-				
+					System.out.println("Valor inválido!!");
 			}
 			
-		}catch(IOException e) {
-			System.out.println("Deu ruim");
+		}catch(Exception e) {
+			System.out.println("Ocorreu um erro na consulta.");
 		}
 	
 	
-	}
-		
-	public class CEP {
-		private String cep;
-		private String lagradouro;
-		private String complemento;
-		private String bairro;
-		private String localidade;
-		private String uf;
-		private String ibge;
-		private String gia;
-		private String ddd;
-		private String siafi;
-		
-		public CEP(String cep, String lagradouro, String complemento, String bairro, String localidade, String uf,
-				String ibge, String gia, String ddd, String siafi) {
-			this.cep = cep;
-			this.lagradouro = lagradouro;
-			this.complemento = complemento;
-			this.bairro = bairro;
-			this.localidade = localidade;
-			this.uf = uf;
-			this.ibge = ibge;
-			this.gia = gia;
-			this.ddd = ddd;
-			this.siafi = siafi;
-		}
-
-		@Override
-		public String toString() {
-			return "Cep: " + cep + "\nlagradouro: " + lagradouro + "\ncomplemento: " + complemento + "\nbairro: "
-					+ bairro + "\nlocalidade: " + localidade + "\nuf: " + uf + "\nibge: " + ibge + "\ngia: " + gia
-					+ "\nddd: " + ddd + "\nsiafi: " + siafi;
-		}
-		
 	}
 }
