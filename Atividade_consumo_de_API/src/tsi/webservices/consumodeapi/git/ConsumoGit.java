@@ -1,6 +1,7 @@
 package tsi.webservices.consumodeapi.git;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -16,8 +17,8 @@ import com.google.gson.reflect.TypeToken;
 public class ConsumoGit {
 
 	private Gson gson = new Gson();
-	private URL url = null;
-	private URLConnection connection = null;
+	private URL url;
+	private URLConnection connection;
 	private String urlUsuario, urlFollowers, urlRepos;
 	
 	Map <Object,Map<String, String>> usuarios = new HashMap<Object, Map<String, String>>();// map usado para guardar os usuario
@@ -66,14 +67,16 @@ public class ConsumoGit {
 					}
 				}
 			}// while(true)
-		} catch (IOException e) {
-			System.err.println("\nNúmero de tentativas excedidas, ou usuário não encontrado.");
+		} catch (FileNotFoundException e) {
+			System.out.println("\nUsuário não existe.");
+		}catch (IOException e) {
+			System.err.println("\nNúmero de tentativas excedidas.");
 		}
 	}
 	
 	
-	// Confere se a url do usuário já foi procurado. Caso não tenha sido ele é adicionado ao Map de usuáios.
-	public <E> void confereBuffer(String chave, Map<Object,E> dados) throws IOException {
+	// Confere se a url fornecida já foi procurada. Caso não tenha sido ela e seu retorno são adicionados ao seu respectivo Map.
+	private <E> void confereBuffer(String chave, Map<Object,E> dados) throws IOException {
 		
 		if(!dados.containsKey(chave)) {
 			url = new URL(chave);
