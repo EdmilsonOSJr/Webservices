@@ -1,8 +1,8 @@
-# Atividade consumo API 
+# Atividade consumo API OpenWeatherMap e Google Maps
 Projeto realizado para mostrar os seguintes dados relativos a uma cidade:
 - A temperatura atual, máxima e mínima para a cidade, em graus Celsius;
-- Uma imagem com a condição do tempo (pesquisar na descrição da API);
-- O horário do nascimento e do pôr do sol (converter os timestamps);
+- Uma imagem com a condição do tempo;
+- O horário do nascimento e do pôr do sol;
 - As coordenadas geográficas;
 - Um mapa do Google posicionado nas coordenadas da cidade.
 
