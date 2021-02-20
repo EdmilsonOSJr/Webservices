@@ -5,22 +5,21 @@ function consulta(){
     
     let cidade = $("#cidade").val();
     const keyOpenWeateher = "67e23b0f421a08c74b84b1fed744be57";
-    let nacerDoSol = new Date(0);
-    let porDoSol = new Date(0);
-
+   
     $.ajax({
         async: true,
         url: "https://api.openweathermap.org/data/2.5/weather?q="+cidade+"&units=metric&APPID="+keyOpenWeateher,
         method: "GET",
         
         success:function(response){
-            nacerDoSol.setUTCSeconds(response.sys.sunrise+response.timezone);
-            porDoSol.setUTCSeconds(response.sys.sunset+response.timezone);
+            let nacerDoSol = new Date(response.sys.sunrise*1000);
+            let porDoSol = new Date(response.sys.sunset*1000);
+            
             $("#temp").html(response.main.temp+"ºC");
             $("#temp_min").html(response.main.temp_min+"ºC");
             $("#temp_max").html(response.main.temp_max+"ºC");
-            $("#nascer_sol").html(nacerDoSol.getUTCHours()+":"+nacerDoSol.getUTCMinutes());
-            $("#por_sol").html(porDoSol.getUTCHours()+":"+porDoSol.getUTCMinutes());
+            $("#nascer_sol").html(nacerDoSol.getHours()+":"+nacerDoSol.getMinutes());
+            $("#por_sol").html(porDoSol.getHours()+":"+porDoSol.getMinutes());
             $("#lat").html(response.coord.lat);
             $("#lon").html(response.coord.lon);
             $("#image").attr('src', "http://openweathermap.org/img/wn/"+response.weather[0].icon+"@2x.png")
