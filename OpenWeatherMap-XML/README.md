@@ -1,5 +1,5 @@
 # Atividade consumo API OpenWeatherMap e Google Maps
-Projeto realizado para mostrar os seguintes dados relativos a uma cidade:
+Projeto realizado para mostrar os seguintes dados relativos a uma cidade, sendo os dados retornados no formato XML:
 - A temperatura atual, máxima e mínima para a cidade, em graus Celsius;
 - Uma imagem com a condição do tempo;
 - O horário do nascimento e do pôr do sol;
