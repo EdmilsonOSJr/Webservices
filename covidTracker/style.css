@@ -1,0 +1,27 @@
+#map{
+    height: 60vh; 
+    width: 50vw;    
+}   
+
+#estatisticas{
+
+    width:98%;
+    height:auto;
+    overflow:hidden;
+}
+
+.card{
+
+    background-color: #DC3545;
+    color: white;
+}
+
+body{
+
+    background-color: #a1dde5;
+}
+
+#cabecalho{
+    background-color: 
+    #99d3e1;
+}
