@@ -8,16 +8,14 @@ from flask import request
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def api():
-    if request.method == 'GET':
-        return json.dumps({'mensagem' : Diretorio().retornaArquivos()})
-    else:
-        return json.dumps({'erro': 'Método inválido'})
+@app.route('/get', methods=['GET'])
+def getLista():
+     return json.dumps({'mensagem' : Diretorio().retornaArquivos()})
 
-@app.route('/get/<recur>', methods=['GET'])
-def get(recur):
-    return json.dumps({'mensagem': Diretorio().lerArquivo(recur)})
+
+@app.route('/get/<recurso>', methods=['GET'])
+def get(recurso):
+    return json.dumps({'mensagem': Diretorio().lerArquivo(recurso)})
 
 
 

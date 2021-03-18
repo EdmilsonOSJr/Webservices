@@ -9,24 +9,43 @@ class Diretorio:
         return self._caminho
  
     def retornaArquivos(self):
-        return os.listdir(self._caminho)
-    
+        lista = os.listdir(self._caminho)
 
-    def deletarArquivo(self, arquivo):
+        nomes = "Arquivos:\n\n\t"
+
+        if len(lista)>0:
+            for file in lista:
+                nomes+= f"{file}\n\t"
+            return nomes
+        else:
+            return f"O diretório {self._caminho} está vazio."
+
+
+    def deletarArquivo(self, nomeArq):
         try:
             
-            if arquivo == "deleteAll":
+            mensagem = f"O arquivo {nomeArq} não foi encontrado."
+
+            if nomeArq == "deleteAll":
+                
                 dir = os.listdir(self._caminho)
-                for file in dir:
-                    os.remove(f"{self._caminho}/{file}")
+
+                if len(dir)>0:
+                    for file in dir:
+                        os.remove(f"{self._caminho}/{file}")
+                    mensagem = f"Todos os arquivos do diretório {self._caminho} foram deletados."
+                else:
+                    mensagem = f"O diretório {self._caminho} está vazio."
+
             else:
-                os.remove(f"{self._caminho}/{arquivo}")
+                os.remove(f"{self._caminho}/{nomeArq}")
+                mensagem = f"O arquivo {nomeArq} foi deletado."
             
-            return "arquivo(s) deletado(s)."
+            return mensagem
         
         except Exception:
         
-            return "arquivo não existe!!"
+            return mensagem
 
 
     def lerArquivo(self, nomeArq):
@@ -40,7 +59,7 @@ class Diretorio:
 
         except Exception:
             
-            return "Arquivo informado não existe!!"
+            return f"O arquivo {nomeArq} não foi encontrado."
                 
 
     def atualizar_criar(self, nomeArq, conteudo, operacao):
@@ -55,25 +74,25 @@ class Diretorio:
                     existe = True
         
             if operacao=='atualizar':
-                if existe == 1:
+                if existe == True:
                     with open(f"{self._caminho}/{nomeArq}", 'a', encoding="utf-8") as arq:
                         arq.write(conteudo)
 
-                    mensagem = "Arquivo atualizado com sucesso." 
+                    mensagem = f"O arquivo {nomeArq} foi atualizado com sucesso." 
                     
                 else:
-                    mensagem = "O arquivo não existe !!!" 
+                    mensagem = f"O arquivo {nomeArq} não existe !!!" 
 
 
             if operacao=='criar':
-                if existe == 0:
+                if existe == False:
                     with open(f"{self._caminho}/{nomeArq}", 'a', encoding="utf-8") as arq:
                         arq.write(conteudo)
 
-                    mensagem = "Arquivo criado com sucesso." 
+                    mensagem = f"O arquivo {nomeArq} criado com sucesso." 
                     
                 else:
-                    mensagem = "O arquivo já existe !!!" 
+                    mensagem = f"O arquivo {nomeArq} já existe !!!" 
             
             
             
