@@ -21,13 +21,13 @@ def menu():
         os.system('clear || cls')
 
         num = input("\nSELECIONE UMA OPÇÃO:\n\n"+
+                "(Pressione <ENTER> sem selecionar uma opção para sair)\n\n"+
                 "1. Listar arquivos\n"+
                 "2. Exibir arquivo\n"+
                 "3. Remover arquivo\n"+
                 "4. Remover todos os arquivos\n"+
                 "5. Criar arquivo\n"+
                 "6. Atualizar arquivo\n"+
-                "(Pressione <ENTER> sem selecionar uma opção para sair)\n\n"+
                 "Opção: ")
         
         if num=='1':
